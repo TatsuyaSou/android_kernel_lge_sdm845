@@ -466,15 +466,15 @@ static void sw49409_get_swipe_info(struct device *dev)
 	d->swipe[SWIPE_L].area.x1 = 0;
 	d->swipe[SWIPE_L].area.y1 = 0;
 	d->swipe[SWIPE_L].area.x2 = 1439;
-	d->swipe[SWIPE_L].area.y2 = 3119;
+	d->swipe[SWIPE_L].area.y2 = 300;
 	d->swipe[SWIPE_L].start.x1 = 0;
 	d->swipe[SWIPE_L].start.y1 = 0;
 	d->swipe[SWIPE_L].start.x2 = 1439;
-	d->swipe[SWIPE_L].start.y2 = 3119;
-	d->swipe[SWIPE_L].border.x1 = 0;
-	d->swipe[SWIPE_L].border.y1 = 0;
-	d->swipe[SWIPE_L].border.x2 = 0;
-	d->swipe[SWIPE_L].border.y2 = 0;
+	d->swipe[SWIPE_L].start.y2 = 300;
+	d->swipe[SWIPE_L].border.x1 = 100;
+	d->swipe[SWIPE_L].border.y1 = 100;
+	d->swipe[SWIPE_L].border.x2 = 100;
+	d->swipe[SWIPE_L].border.y2 = 100;
 	d->swipe[SWIPE_L].debug_enable = false;
 
 	d->swipe[SWIPE_R].enable = false;
@@ -488,15 +488,15 @@ static void sw49409_get_swipe_info(struct device *dev)
 	d->swipe[SWIPE_R].area.x1 = 0;
 	d->swipe[SWIPE_R].area.y1 = 0;
 	d->swipe[SWIPE_R].area.x2 = 1439;
-	d->swipe[SWIPE_R].area.y2 = 3119;
+	d->swipe[SWIPE_R].area.y2 = 300;
 	d->swipe[SWIPE_R].start.x1 = 0;
 	d->swipe[SWIPE_R].start.y1 = 0;
 	d->swipe[SWIPE_R].start.x2 = 1439;
-	d->swipe[SWIPE_R].start.y2 = 3119;
-	d->swipe[SWIPE_R].border.x1 = 0;
-	d->swipe[SWIPE_R].border.y1 = 0;
-	d->swipe[SWIPE_R].border.x2 = 0;
-	d->swipe[SWIPE_R].border.y2 = 0;
+	d->swipe[SWIPE_R].start.y2 = 300;
+	d->swipe[SWIPE_R].border.x1 = 100;
+	d->swipe[SWIPE_R].border.y1 = 100;
+	d->swipe[SWIPE_R].border.x2 = 100;
+	d->swipe[SWIPE_R].border.y2 = 100;
 	d->swipe[SWIPE_R].debug_enable = false;
 
 	d->swipe[SWIPE_U].enable = false;
@@ -512,7 +512,7 @@ static void sw49409_get_swipe_info(struct device *dev)
 	d->swipe[SWIPE_U].area.x2 = 1359;
 	d->swipe[SWIPE_U].area.y2 = 3119;
 	d->swipe[SWIPE_U].start.x1 = 439;
-	d->swipe[SWIPE_U].start.y1 = 1561;
+	d->swipe[SWIPE_U].start.y1 = 2797;
 	d->swipe[SWIPE_U].start.x2 = 1000;
 	d->swipe[SWIPE_U].start.y2 = 3119;
 	d->swipe[SWIPE_U].border.x1 = 0;
@@ -532,15 +532,15 @@ static void sw49409_get_swipe_info(struct device *dev)
 	d->swipe[SWIPE_D].area.x1 = 80;
 	d->swipe[SWIPE_D].area.y1 = 0;
 	d->swipe[SWIPE_D].area.x2 = 1359;
-	d->swipe[SWIPE_D].area.y2 = 3119;
+	d->swipe[SWIPE_D].area.y2 = 2879;
 	d->swipe[SWIPE_D].start.x1 = 80;
 	d->swipe[SWIPE_D].start.y1 = 0;
 	d->swipe[SWIPE_D].start.x2 = 1359;
-	d->swipe[SWIPE_D].start.y2 = 1559;
-	d->swipe[SWIPE_D].border.x1 = 0;
-	d->swipe[SWIPE_D].border.y1 = 0;
-	d->swipe[SWIPE_D].border.x2 = 0;
-	d->swipe[SWIPE_D].border.y2 = 0;
+	d->swipe[SWIPE_D].start.y2 = 300;
+	d->swipe[SWIPE_D].border.x1 = 30;
+	d->swipe[SWIPE_D].border.y1 = 30;
+	d->swipe[SWIPE_D].border.x2 = 30;
+	d->swipe[SWIPE_D].border.y2 = 30;
 	d->swipe[SWIPE_D].debug_enable = false;
 }
 
@@ -2609,25 +2609,13 @@ int sw49409_irq_handler(struct device *dev)
 static ssize_t show_swipe_enable(struct device *dev, char *buf)
 {
 	struct sw49409_data *d = to_sw49409_data(dev);
+	int value = d->swipe[SWIPE_U].enable;
 	int ret = 0;
 
-	ret += snprintf(buf + ret, PAGE_SIZE, "%d %d\n",
-			SWIPE_L, d->swipe[SWIPE_L].enable);
-	ret += snprintf(buf + ret, PAGE_SIZE, "%d %d\n",
-			SWIPE_R, d->swipe[SWIPE_R].enable);
-	ret += snprintf(buf + ret, PAGE_SIZE, "%d %d\n",
-			SWIPE_D, d->swipe[SWIPE_D].enable);
-	ret += snprintf(buf + ret, PAGE_SIZE, "%d %d\n",
-			SWIPE_U, d->swipe[SWIPE_U].enable);
+	TOUCH_TRACE();
 
-	TOUCH_I("%s: ts->swipe[SWIPE_L].enable = %d\n", __func__,
-			d->swipe[SWIPE_L].enable);
-	TOUCH_I("%s: ts->swipe[SWIPE_R].enable = %d\n", __func__,
-			d->swipe[SWIPE_R].enable);
-	TOUCH_I("%s: ts->swipe[SWIPE_D].enable = %d\n", __func__,
-			d->swipe[SWIPE_D].enable);
-	TOUCH_I("%s: ts->swipe[SWIPE_U].enable = %d\n", __func__,
-			d->swipe[SWIPE_U].enable);
+	ret = snprintf(buf + ret, PAGE_SIZE, "%d\n", value);
+	TOUCH_I("%s: value = %d\n", __func__, value);
 
 	sw49409_print_swipe_info(dev);
 
@@ -2637,35 +2625,20 @@ static ssize_t show_swipe_enable(struct device *dev, char *buf)
 static ssize_t store_swipe_enable(struct device *dev, const char *buf, size_t count)
 {
 	struct sw49409_data *d = to_sw49409_data(dev);
-	int enable_swipe[2] = {-1, 0}; // { SWIPE_DIRECTION, 0 = disabled/1 = enabled }
+	int value = 0;
 
-	if (sscanf(buf, "%d %d", &enable_swipe[0], &enable_swipe[1]) <= 0) {
-		TOUCH_E("Failed to set enable_swipe\n");
+	TOUCH_TRACE();
+
+	if (kstrtos32(buf, 10, &value) < 0)
+		return count;
+
+	if ((value > 1) || (value < 0)) {
+		TOUCH_E("Set Swipe mode wrong, 0(Disable), 1(SWIPE_UP) only\n");
 		return count;
 	}
 
-	if(enable_swipe[0] < SWIPE_L || enable_swipe[0] > SWIPE_D) {
-		TOUCH_E("Not supported Swipe (%d)\n", enable_swipe[0]);
-		return count;
-	}
-
-	switch(enable_swipe[0]) {
-		case SWIPE_L:
-			d->swipe[SWIPE_L].enable = enable_swipe[1] ? true : false;
-			break;
-		case SWIPE_R:
-			d->swipe[SWIPE_R].enable = enable_swipe[1] ? true : false;
-			break;
-		case SWIPE_U:
-			d->swipe[SWIPE_U].enable = enable_swipe[1] ? true : false;
-			break;
-		case SWIPE_D:
-			d->swipe[SWIPE_D].enable = enable_swipe[1] ? true : false;
-			break;
-		default: break;
-	}
-
-	TOUCH_I("%s: Set swipe %d to %d\n", __func__, enable_swipe[0], enable_swipe[1]);
+	d->swipe[SWIPE_U].enable = value;
+	TOUCH_I("%s: value = %d\n", __func__, d->swipe[SWIPE_U].enable);
 
 	return count;
 }
